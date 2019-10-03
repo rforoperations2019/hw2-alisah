@@ -12,6 +12,7 @@ require(rgdal)
 require(leaflet)
 require(leaflet.extras)
 require(leaflet.providers)
+require(readit)
 
 require(dplyr)
 require(readxl)
@@ -25,7 +26,7 @@ base <-leaflet() %>%
   setView(lat = 40.75, lng = -74, zoom = 11.3) 
 
 base %>%
-  addProviderTiles("OpenStreetMap.Mapnik")
+  addProviderTiles(providers$Stamen.TonerBackground)
 
 
 ```
@@ -35,10 +36,13 @@ base %>%
 
 n_tabs <- readOGR("Neighborhood Tabulation Areas.geojson")
 
+
+socio <- readit('acs_socio_08to12_ntas.xlsx')
+
 leaflet(data = n_tabs) %>%
   setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
   addTiles() %>%
-  addPolygons(color = '#03F')
+  addPolygons(color = '#03F',weight = 2)
 
 
 ```
