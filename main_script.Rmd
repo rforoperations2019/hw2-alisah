@@ -1,0 +1,47 @@
+---
+title: "Homework 2"
+author: "Alisa Hartle"
+date: "October 2, 2019"
+output: html_document
+---
+
+
+  
+```{r setup, include=FALSE}
+require(rgdal)
+require(leaflet)
+require(leaflet.extras)
+require(leaflet.providers)
+
+require(dplyr)
+require(readxl)
+require(stringr)
+```
+
+# Loading in the data
+```{r, controls}
+library(leaflet)
+base <-leaflet() %>%
+  addTiles() 
+
+base %>%
+  addProviderTiles(providers$CartoDB.DarkMatter)
+
+
+```
+
+
+``` {r, polygon}
+
+n_tabs <- readOGR("Neighborhood Tabulation Areas.geojson")
+
+leaflet(data = n_tabs) %>%
+  setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
+  addTiles() %>%
+  addProviderTiles(providers$CartoDB.DarkMatter) 
+
+
+```
+
+
+
