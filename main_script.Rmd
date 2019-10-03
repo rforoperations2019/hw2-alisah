@@ -20,28 +20,40 @@ require(stringr)
 
 # Loading in the data
 ```{r, controls}
-library(leaflet)
+
 base <-leaflet() %>%
-  addTiles() 
+  setView(lat = 40.75, lng = -74, zoom = 11.3) 
 
 base %>%
-  addProviderTiles(providers$CartoDB.DarkMatter)
+  addProviderTiles("OpenStreetMap.Mapnik")
 
 
 ```
 
 
-``` {r, polygon}
+```{r, polygon}
 
 n_tabs <- readOGR("Neighborhood Tabulation Areas.geojson")
 
 leaflet(data = n_tabs) %>%
   setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
   addTiles() %>%
-  addProviderTiles(providers$CartoDB.DarkMatter) 
+  addPolygons(color = '#03F')
 
 
 ```
 
+
+```{r}
+
+stations <- readOGR("Subway Stations.geojson")
+
+leaflet(data = stations) %>%
+  setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
+  addTiles() %>%
+  addCircleMarkers(radius = 1)
+
+
+```
 
 
