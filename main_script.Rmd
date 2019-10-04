@@ -20,6 +20,22 @@ require(stringr)
 ```
 
 # Loading in the data
+
+```{r}
+#neighborhood tabulation areas
+n_tabs <- readOGR("Neighborhood Tabulation Areas.geojson")
+
+# MTA subway stations
+stations <- readOGR("Subway Stations.geojson")
+
+
+# MTA subway lines
+lines <- readOGR("Subway Lines.geojson")
+
+# Population counts for each neighborhood tabulation area
+pop <- readit('demo_2016acs5yr_nta.xlsx')
+```
+
 ```{r, controls}
 
 base <-leaflet() %>%
@@ -34,28 +50,36 @@ base %>%
 
 ```{r, polygon}
 
-n_tabs <- readOGR("Neighborhood Tabulation Areas.geojson")
-
-
-socio <- readit('acs_socio_08to12_ntas.xlsx')
 
 leaflet(data = n_tabs) %>%
-  setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
-  addTiles() %>%
-  addPolygons(color = '#03F',weight = 2)
+  setView(lat = 40.75, lng = -73.9, zoom = 11.3) %>%
+  addProviderTiles(providers$Stamen.TonerBackground) %>%
+  addPolygons(color = '#2ca25f', weight = 2)
 
 
 ```
 
 
+# Point Maps with the NYC Subway
 ```{r}
 
-stations <- readOGR("Subway Stations.geojson")
 
 leaflet(data = stations) %>%
   setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
   addTiles() %>%
-  addCircleMarkers(radius = 1)
+  addProviderTiles(providers$Stamen.TonerBackground) %>%
+  addCircleMarkers(radius = 1, color = '#fc8d59', opacity = 1)
+
+
+```
+
+```{r}
+
+leaflet(data = lines) %>%
+  setView(lat = 40.75, lng = -73.9, zoom = 11.3) %>%
+  addTiles() %>%
+  addProviderTiles(providers$Stamen.TonerBackground) %>%
+  addPolylines()
 
 
 ```
