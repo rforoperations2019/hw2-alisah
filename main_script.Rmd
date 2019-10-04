@@ -70,23 +70,32 @@ leaflet(data = n_tabs) %>%
 ```{r}
 
 
-leaflet(data = stations) %>%
+points <- leaflet(data = stations) %>%
   setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
   addTiles() %>%
   addProviderTiles(providers$Stamen.TonerBackground) %>%
   addCircleMarkers(radius = 1, color = '#18567d', opacity = 1)
 
-
+points
 ```
 
+# Plotting subway lines. And if you think I'm bad at picking 
+# a basemap, you can pick a different one.
+
 ```{r}
+
 
 leaflet(data = lines) %>%
   setView(lat = 40.75, lng = -73.9, zoom = 11.3) %>%
   addTiles() %>%
   addProviderTiles(providers$Stamen.TonerBackground) %>%
-  addPolylines()
+  addProviderTiles("Stamen.TonerLite", group = "Toner Lite") %>%
+  addPolylines() %>%
+  addLayersControl(
+    baseGroups = c("Toner", "Toner Lite"),
+    options = layersControlOptions(collapsed = FALSE))
 
+ 
 
 ```
 
@@ -101,7 +110,12 @@ pal <- colorBin("OrRd", domain = merge_things$Pop_1E, bins = bins)
 
 base %>%
   addPolygons(data = merge_things, color = '#7d2218', fillColor = ~pal(Pop_1E), 
-              fillOpacity = 1, weight = 2)
+              fillOpacity = 1, weight = 2) %>%
+  addLegend(pal = pal, values = merge_things$Pop_1E,
+            opacity = 1.0, title = 'Population Totals',
+            position = "bottomleft")
+
+
 ```
 
 
