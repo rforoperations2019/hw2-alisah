@@ -22,6 +22,9 @@ require(stringr)
 # Loading in the data
 
 ```{r}
+
+#All datasets brought to you by NYCOpenData
+
 #neighborhood tabulation areas
 n_tabs <- readOGR("Neighborhood Tabulation Areas.geojson")
 
@@ -36,18 +39,21 @@ lines <- readOGR("Subway Lines.geojson")
 pop <- readit('demo_2016acs5yr_nta.xlsx')
 ```
 
+# Creating a base map that will be used later
+
 ```{r, controls}
 
 base <-leaflet() %>%
   setView(lat = 40.75, lng = -74, zoom = 11.3) 
 
-base %>%
+base <- base %>%
   addProviderTiles(providers$Stamen.TonerBackground)
 
 
 ```
 
 
+# A map of Neighborhood Tabulation Areas in NYC
 ```{r, polygon}
 
 
@@ -68,7 +74,7 @@ leaflet(data = stations) %>%
   setView(lat = 40.75, lng = -74, zoom = 11.3) %>%
   addTiles() %>%
   addProviderTiles(providers$Stamen.TonerBackground) %>%
-  addCircleMarkers(radius = 1, color = '#fc8d59', opacity = 1)
+  addCircleMarkers(radius = 1, color = '#18567d', opacity = 1)
 
 
 ```
@@ -82,6 +88,20 @@ leaflet(data = lines) %>%
   addPolylines()
 
 
+```
+
+#Incorporating population data
+
+```{r}
+
+merge_things <- merge(x = n_tabs, y = pop, by.x = "ntacode", by.y = "GeoID")
+bins <- c(0, 30000, 35000, 40000, 45000, 50000, 550000, 60000, Inf)
+pal <- colorBin("OrRd", domain = merge_things$Pop_1E, bins = bins)
+
+
+base %>%
+  addPolygons(data = merge_things, color = '#7d2218', fillColor = ~pal(Pop_1E), 
+              fillOpacity = 1, weight = 2)
 ```
 
 
